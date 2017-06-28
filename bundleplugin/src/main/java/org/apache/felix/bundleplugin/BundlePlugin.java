@@ -19,6 +19,17 @@
 package org.apache.felix.bundleplugin;
 
 
+import aQute.bnd.header.Attrs;
+import aQute.bnd.osgi.Analyzer;
+import aQute.bnd.osgi.Builder;
+import aQute.bnd.osgi.Constants;
+import aQute.bnd.osgi.Descriptors.PackageRef;
+import aQute.bnd.osgi.EmbeddedResource;
+import aQute.bnd.osgi.FileResource;
+import aQute.bnd.osgi.Jar;
+import aQute.bnd.osgi.Packages;
+import aQute.bnd.osgi.Processor;
+import aQute.lib.spring.SpringXMLType;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -43,7 +54,6 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
-
 import org.apache.maven.archiver.ManifestSection;
 import org.apache.maven.archiver.MavenArchiveConfiguration;
 import org.apache.maven.archiver.MavenArchiver;
@@ -74,18 +84,6 @@ import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.PropertyUtils;
 import org.codehaus.plexus.util.StringUtils;
 
-import aQute.bnd.header.Attrs;
-import aQute.bnd.osgi.Analyzer;
-import aQute.bnd.osgi.Builder;
-import aQute.bnd.osgi.Constants;
-import aQute.bnd.osgi.Descriptors.PackageRef;
-import aQute.bnd.osgi.EmbeddedResource;
-import aQute.bnd.osgi.FileResource;
-import aQute.bnd.osgi.Jar;
-import aQute.bnd.osgi.Packages;
-import aQute.bnd.osgi.Processor;
-import aQute.lib.spring.SpringXMLType;
-
 
 /**
  * Create an OSGi bundle from Maven project
@@ -106,6 +104,13 @@ public class BundlePlugin extends AbstractMojo
      */
     @Parameter( property = "niceManifest", defaultValue = "false" )
     protected boolean niceManifest;
+
+    /**
+     * File with more BND instructions
+     */
+    @Parameter(property = "instructionsFile",
+            defaultValue = "${project.build.directory}/generated-sources/annotations/OSGI-INF/bndInstructions.properties")
+    protected File instructionsFile;
 
     /**
      * File where the BND instructions will be dumped
